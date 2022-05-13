@@ -1,3 +1,10 @@
+# BourbonBots
+
+This was built using the screeps typescript starter. Anything that's good can be attributed to that, anything that's stupid can be attributed to me. 
+
+
+
+
 # Screeps Typescript Starter
 
 Screeps Typescript Starter is a starting point for a Screeps AI written in Typescript. It provides everything you need to start writing your AI whilst leaving `main.ts` as empty as possible.

@@ -1,26 +1,4 @@
-import { SourceMapConsumer } from "source-map";
 
-export function fixerConfig(howMany) {
-    let fixerBody = [];
-    switch (howMany) {
-        case 3:
-            fixerBody = [WORK,CARRY,MOVE];
-            break;
-        case 4:
-            fixerBody = [WORK,CARRY,MOVE,MOVE];
-            break;
-        case 5:
-            fixerBody = [WORK,WORK,CARRY,MOVE,MOVE];
-            break;
-        case 6:
-            fixerBody = [WORK,WORK,WORK,CARRY,MOVE,MOVE];
-            break;
-        case 7:
-            fixerBody = [WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE];
-            break;
-    }
-    return fixerBody;
-}
 
 export var roleFixer = {
 

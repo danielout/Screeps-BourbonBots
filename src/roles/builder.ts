@@ -1,25 +1,4 @@
-import { SourceMapConsumer } from "source-map";
 
-export function builderConfig(howMany) {
-    let builderBody = [WORK,CARRY,MOVE];
-    switch (howMany) {
-        case 3:
-            break;
-        case 4:
-            builderBody = [WORK,CARRY,MOVE,MOVE];
-            break;
-        case 5:
-            builderBody = [WORK,WORK,CARRY,MOVE,MOVE];
-            break;
-        case 6:
-            builderBody = [WORK,WORK,WORK,CARRY,MOVE,MOVE];
-            break;
-        case 7:
-            builderBody = [WORK,WORK,CARRY,CARRY,MOVE,MOVE,MOVE];
-            break;
-    }
-    return builderBody;
-}
 
 export var roleBuilder = {
 

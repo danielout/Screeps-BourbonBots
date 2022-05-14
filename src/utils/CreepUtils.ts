@@ -40,6 +40,7 @@ export function updateCreeps() {
     } else {
         return false;
     }
+
 }
 
 

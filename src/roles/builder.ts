@@ -7,10 +7,10 @@ export var roleBuilder = {
 
         if(creep.store.getUsedCapacity(RESOURCE_ENERGY) == 0) { // If we have an empty inventory, fix that
             // We priorotize dropped resources
-            var drops = creep.room.find(FIND_DROPPED_RESOURCES);
-            if(creep.pickup(drops[0]) == ERR_NOT_IN_RANGE) { // If we aren't in range of our target, move to it, otherwise pickup energy.
-                creep.moveTo(drops[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-            } else if(drops.length == 0) { // If there are no dropped resources, we try to pickup resources from storage
+            var drops = creep.pos.findClosestByPath(creep.room.find(FIND_DROPPED_RESOURCES));
+            if(creep.pickup(drops) == ERR_NOT_IN_RANGE) { // If we aren't in range of our target, move to it, otherwise pickup energy.
+                creep.moveTo(drops, {visualizePathStyle: {stroke: '#ffaa00'}});
+            } else if(drops == null) { // If there are no dropped resources, we try to pickup resources from storage
                 var sources = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return (structure.structureType == STRUCTURE_CONTAINER ||
@@ -18,8 +18,9 @@ export var roleBuilder = {
                             structure.store.getUsedCapacity(RESOURCE_ENERGY) > 0;
                     }
                 });
-                if(creep.withdraw(sources[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) { // If we aren't in range of our target, move to it. Otherwise, withdraw energy
-                    creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                var closestSource = creep.pos.findClosestByPath(sources);
+                if(creep.withdraw(closestSource, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) { // If we aren't in range of our target, move to it. Otherwise, withdraw energy
+                    creep.moveTo(closestSource, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
             }
         }
@@ -31,8 +32,9 @@ export var roleBuilder = {
         if(creep.memory.building) {
             var targets = creep.room.find(FIND_CONSTRUCTION_SITES);
             if(targets.length) {
-                if(creep.build(targets[0]) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                var closestSite = creep.pos.findClosestByPath(targets);
+                if(creep.build(closestSite) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(closestSite, {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
         }

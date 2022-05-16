@@ -270,7 +270,7 @@ export function manageSpawns(harvestersRequired: number) {
         let tempArray = _.filter(Game.structures, (structure) => structure.structureType == 'spawn');
         let currentMoney = tempArray[0].room.energyAvailable;
         if (currentMoney >= price) {
-            console.log('Spawning! Current money: ' + currentMoney + ' // Price of Desired spawn: ' + price)
+            console.log('Spawning! Current money: ' + currentMoney + ' // Price of Desired spawn: ' + price);
             return true;
         } else {
             /* console.log('NOT Spawning! Current money: ' + currentMoney + ' // Price of Desired spawn: ' + price) */
@@ -311,9 +311,11 @@ export function manageSpawns(harvestersRequired: number) {
                     let harvesterBody = harvesterSpawn[1];
                     if(costCheck(harvesterSpawn[0]) == true) {
                         spawnHarvester(harvesterBody);
-                    } else if (costCheck(250) == true) {
-                        console.log('Cannot afford our max size harvester. Spawning a smaller lad for now.');
-                        spawnHarvester([WORK, WORK, MOVE]);
+                    } else if (harvesters.length == 0) {
+                        if(costCheck(250) == true) {
+                            console.log('Cannot afford our max size harvester. Spawning a smaller lad for now, since we have zero.');
+                            spawnHarvester([WORK, WORK, MOVE]);
+                        }
                     }
                 }
                 else if (haulers.length < haulerMin) {
@@ -321,9 +323,11 @@ export function manageSpawns(harvestersRequired: number) {
                     let haulerBody = haulerSpawn[1];
                     if(costCheck(haulerSpawn[0]) == true) {
                         spawnHauler(haulerBody);
-                    } else if (costCheck(200) == true) {
-                        console.log('Cannot afford our max size hauler. Spawning a smaller lad for now')
-                        spawnHauler([CARRY, CARRY, MOVE, MOVE]);
+                    } else if (haulers.length == 0) {
+                        if(costCheck(250) == true) {
+                            console.log('Cannot afford our max size hauler. Spawning a smaller lad for now, since we have zero.')
+                            spawnHauler([CARRY, CARRY, MOVE, MOVE]);
+                        }
                     }
                 } else {
                     let plebSpawn = calculateBestBody(maxPossibleFunds, ...plebRatio);

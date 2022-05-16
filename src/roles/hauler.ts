@@ -8,7 +8,7 @@ export var roleHauler = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        if(creep.store.getFreeCapacity(RESOURCE_ENERGY) > 0) { // If we don't have a full inventory, fix that.
+        if(creep.store.getUsedCapacity(RESOURCE_ENERGY) == 0) { // If we don't have a full inventory, fix that.
             // We priorotize dropped resources
             var drops = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES);
             if (drops != null) { var pickupTarget: any = "drop"; }
@@ -28,6 +28,7 @@ export var roleHauler = {
                     creep.moveTo(closestSource, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
             }
+
         } else { // If we've got energy, let's go find somewhere to put it. Prioritizes extensions, spawns, and towers. If those fail, tries to put it in a container.
 
             // Find all the things we want to put energy in to that aren't full yet

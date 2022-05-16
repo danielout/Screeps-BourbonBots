@@ -1,20 +1,29 @@
-import { isUndefined } from "lodash";
-import { SourceNode } from "source-map";
-
-let myTarget: SourceNode;
+import { isUndefined, random } from "lodash";
 
 export var roleHarvester = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
 
-        if (isUndefined(myTarget)) {
-            var sources = creep.room.find(FIND_SOURCES);
-            let myTarget = sources[0];
-        }
-        var sources = creep.room.find(FIND_SOURCES);
-        if(creep.harvest(sources[0]) == ERR_NOT_IN_RANGE) {
-            creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+        if (isUndefined(creep.memory.harvestTarget)) {
+            console.log("Finding a node for harvester: " + creep.name);
+            // Find a node with no workers
+            function checkWorker(source: sourceData, sourceIndex: number) {
+                if (source.workers == null && isUndefined(creep.memory.harvestTarget)) {
+                    creep.memory.harvestTarget = source.id;
+                    Memory.rooms[creep.room.name].sources[sourceIndex].workers = creep.name;
+                    console.log("Harvester " + creep.name + " has claimed Source " + source.id);
+                }
+            }
+            _.forEach(Memory.rooms[creep.room.name].sources, checkWorker);
+            if (isUndefined(creep.memory.harvestTarget)) {
+                console.log(creep.name + " was unable to find a harvesting target!");
+            }
+        } else {
+            var mySource = Game.getObjectById(creep.memory.harvestTarget);
+            if(creep.harvest(mySource) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(mySource, {visualizePathStyle: {stroke: '#ffaa00'}});
+            }
         }
     }
 };

@@ -4,9 +4,11 @@ import { roleUpgrader } from 'roles/upgrader';
 import { roleBuilder } from 'roles/builder';
 import { roleHauler } from "roles/hauler";
 import { roleFixer } from "roles/fixer";
-import { manageSpawns } from 'spawning/spawn-creeps';
+
 import { doStartup } from 'utils/StartupHelper';
 import { isUndefined } from "lodash";
+import { manageRoom } from "rooms/roomController";
+
 
 declare global {
   /*
@@ -32,8 +34,38 @@ declare global {
 
   interface CreepMemory {
     role: string;
-/*    room: string;
-    working: boolean; */
+    harvestTarget?: Id<Source>;
+    // working: boolean;
+  }
+
+  //////////////////////////////////////
+  /// ROOMS
+  /// How we store room data
+  //////////////////////////////////////
+
+  // Our basic room memory layout
+  export interface RoomMemory {
+    sources: Array<sourceData>;
+    towers: Array<towerData>;
+    depots: Array<depotData>;
+  }
+
+  // storing Sources and who is working them
+  export interface sourceData {
+    id: Id<Source>;
+    workers: Creep["name"];
+  }
+
+  // storing Towers and what they're doing
+  export interface towerData {
+    id: Id<Structure>;
+    task: any;
+  }
+
+  // storing depots (containers, warehouses) and their data
+  export interface depotData {
+    id: Id<Structure>;
+    mainUse: any;
   }
 
   // Syntax for adding proprties to `global` (ex "global.log")
@@ -61,12 +93,17 @@ export const loop = ErrorMapper.wrapLoop(() => {
 });
 
 module.exports.loop = function () {
+
   if (isUndefined(startupDone)) {
     doStartup();
     let startupDone = true;
   }
 
-  manageSpawns();
+
+  for(var name in Memory.rooms) {
+    var room = Game.rooms[name];
+    manageRoom(room);
+  }
 
   for(var name in Game.creeps) {
       var creep = Game.creeps[name];
@@ -86,4 +123,24 @@ module.exports.loop = function () {
         roleFixer.run(creep);
     }
   }
+
+/*
+  function repairRoom(roomName: string) {
+    var structures = Game.rooms[roomName].find(FIND_STRUCTURES, {
+        filter: (structure) => { return ((structure.hits != structure.hitsMax) && structure.structureType != STRUCTURE_WALL); }
+      });
+
+    if(structures.length > 0) {
+        var towers: Array<StructureTower> = Game.rooms[roomName].find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+        towers.forEach(tower => tower.repair(structures[0]));
+    }
+  }
+
+  repairRoom("E5S49");
+
 }
+Game.rooms["E5S49"].find(FIND_MY_STRUCTURES, { filter: (structure) => { return (structure.hits != structure.hitsMax); }})
+
+*/
+
+} // End of Loop

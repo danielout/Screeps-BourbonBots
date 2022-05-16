@@ -28,6 +28,8 @@ export var roleFixer = {
             var extensionTargets = creep.room.find(FIND_STRUCTURES, {filter: (structure) => {return (structure.structureType == STRUCTURE_EXTENSION) && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;}});
             var towerTargets = creep.room.find(FIND_STRUCTURES, {filter: (structure) => {return (structure.structureType == STRUCTURE_TOWER) && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;}});
             var storageTargets = creep.room.find(FIND_STRUCTURES, {filter: (structure) => {return (structure.structureType == STRUCTURE_STORAGE) && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;}});
+            storageTargets.shift();
+            /* storageTargets = _.sortBy(storageTargets, (structure) => this.store.getUsedCapacity(RESOURCE_ENERGY)); */
 
             // Prioritized list - set the first one of these we find to be our deposit target.
             if (spawnTargets.length > 0) {

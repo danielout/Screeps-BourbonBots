@@ -14,6 +14,6 @@ export function manageRoom(thisRoom: Room) {
     var harvestersNeeded = Memory.rooms[thisRoom.name].sources.length;
 
     // Manage Spawns if we need to
-    manageSpawns();
+    manageSpawns(harvestersNeeded);
 
 }

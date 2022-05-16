@@ -1,16 +1,16 @@
 import { updateCreeps } from "utils/CreepUtils";
 
-export function manageSpawns() {
+export function manageSpawns(harvestersRequired: number) {
 
     /* Define our population targets */
-    let harvesterMin = 2;
-    let harvesterMax = 3;
-    let builderMin = 1;
+    let harvesterMin = harvestersRequired;
+    let harvesterMax = harvestersRequired + 1;
+    let builderMin = 2;
     let builderMax = 4;
-    let upgraderMin = 1;
+    let upgraderMin = 2;
     let upgraderMax = 4;
-    let haulerMin = 1;
-    let haulerMax = 2;
+    let haulerMin = 2;
+    let haulerMax = 4;
     let fixerMin = 1;
     let fixerMax = 1;
     let plebRatio: [number, number, number, number, number, number, number, number, number] = [0.75, 1, 0, 0, 0, 0, 0, 0, 0];
@@ -334,11 +334,11 @@ export function manageSpawns() {
                 }
         } // If we meet all our minimums, and if we aren't at our max for any role, spawn those.
         else if(
-            (harvesters.length < harvesterMax) ||
             (builders.length < builderMax) ||
             (upgraders.length < upgraderMax) ||
             (haulers.length < haulerMax) ||
-            (fixers.length < fixerMax)
+            (fixers.length < fixerMax) ||
+            (harvesters.length < harvesterMax)
             ) {
                 if ((haulers.length < haulerMax)) {
                     let haulerSpawn = calculateBestBody(maxPossibleFunds, ...haulRatio);

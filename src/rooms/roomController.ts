@@ -16,4 +16,17 @@ export function manageRoom(thisRoom: Room) {
     // Manage Spawns if we need to
     manageSpawns(harvestersNeeded);
 
+    // Repair our room if we need to
+    function repairRoom(roomName: string) {
+        var structures = Game.rooms[roomName].find(FIND_STRUCTURES, {
+            filter: (structure) => { return ((structure.hits != structure.hitsMax) && structure.structureType != STRUCTURE_WALL); }
+        });
+
+        if(structures.length > 0) {
+            var towers: Array<StructureTower> = Game.rooms[roomName].find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+            towers.forEach(tower => tower.repair(structures[0]));
+        }
+    }
+    repairRoom(thisRoom.name);
+
 }

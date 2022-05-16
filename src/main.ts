@@ -124,23 +124,6 @@ module.exports.loop = function () {
     }
   }
 
-/*
-  function repairRoom(roomName: string) {
-    var structures = Game.rooms[roomName].find(FIND_STRUCTURES, {
-        filter: (structure) => { return ((structure.hits != structure.hitsMax) && structure.structureType != STRUCTURE_WALL); }
-      });
 
-    if(structures.length > 0) {
-        var towers: Array<StructureTower> = Game.rooms[roomName].find(FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-        towers.forEach(tower => tower.repair(structures[0]));
-    }
-  }
-
-  repairRoom("E5S49");
-
-}
-Game.rooms["E5S49"].find(FIND_MY_STRUCTURES, { filter: (structure) => { return (structure.hits != structure.hitsMax); }})
-
-*/
 
 } // End of Loop

@@ -7,12 +7,14 @@ export var roleHauler = {
 
     /** @param {Creep} creep **/
     run: function(creep) {
+
         if(creep.store.getFreeCapacity(RESOURCE_ENERGY) > 0) { // If we don't have a full inventory, fix that.
             // We priorotize dropped resources
-            var drops = creep.room.find(FIND_DROPPED_RESOURCES);
-            if(creep.pickup(drops[0]) == ERR_NOT_IN_RANGE) { // If we aren't in range of our target, move to it, otherwise pickup energy.
-                creep.moveTo(drops[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-            } else if(drops.length == 0) { // If there are no dropped resources, we try to pickup resources from storage
+            var drops = creep.pos.findClosestByPath(FIND_DROPPED_RESOURCES);
+            if (drops != null) { var pickupTarget: any = "drop"; }
+            if(creep.pickup(drops) == ERR_NOT_IN_RANGE) { // If we aren't in range of our target, move to it, otherwise pickup energy.
+                creep.moveTo(drops, {visualizePathStyle: {stroke: '#ffaa00'}});
+            } else if(drops == null) { // If there are no dropped resources, we try to pickup resources from storage
                 var sources = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
                         return (structure.structureType == STRUCTURE_CONTAINER ||
@@ -20,8 +22,10 @@ export var roleHauler = {
                             structure.store.getUsedCapacity(RESOURCE_ENERGY) > 0;
                     }
                 });
-                if(creep.withdraw(sources[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) { // If we aren't in range of our target, move to it. Otherwise, withdraw energy
-                    creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+                var closestSource: Structure = creep.pos.findClosestByPath(sources);
+                var pickupTarget: any = closestSource;
+                if(creep.withdraw(closestSource, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) { // If we aren't in range of our target, move to it. Otherwise, withdraw energy
+                    creep.moveTo(closestSource, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
             }
         } else { // If we've got energy, let's go find somewhere to put it. Prioritizes extensions, spawns, and towers. If those fail, tries to put it in a container.
@@ -34,15 +38,15 @@ export var roleHauler = {
 
             // Prioritized list - set the first one of these we find to be our deposit target.
             if (spawnTargets.length > 0) {
-                var depositTarget = spawnTargets[0];
+                var depositTarget: Structure = creep.pos.findClosestByPath(spawnTargets);
             } else if (extensionTargets.length > 0) {
-                var depositTarget = extensionTargets[0];
+                var depositTarget: Structure = creep.pos.findClosestByPath(extensionTargets);
             } else if (towerTargets.length > 0) {
-                var depositTarget = towerTargets[0];
+                var depositTarget: Structure = creep.pos.findClosestByPath(towerTargets);
             } else if (storageTargets.length > 0) {
-                var depositTarget = storageTargets[0];
+                var depositTarget: Structure = creep.pos.findClosestByPath(storageTargets);
             } else {
-                var depositTarget = null;
+                var depositTarget: Structure = null;
             }
 
             // If we have found a valid target, move to it and deposit

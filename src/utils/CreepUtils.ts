@@ -1,3 +1,4 @@
+import { filter } from "lodash";
 import { SourceMapConsumer } from "source-map";
 
 export function updateCreeps() {
@@ -42,5 +43,16 @@ export function updateCreeps() {
     }
 
 }
+/*
+export function getClosestDepot(whatRoom: Room, myGoal: string) {
+    // Get the depots for the room
+    var roomDepots: Array<Structure> = [];
+    _.forEach(Memory.rooms[whatRoom.name].depots, function(obj: depotData) { roomDepots.push(Game.getObjectById(obj.id)); });
 
+    if (myGoal == "deposit") {
+        var targetDepots: Array<Structure> = filter(roomDepots, (structure) => {return (structure.structureType == STRUCTURE_STORAGE || structure.structureType == STRUCTURE_CONTAINER) && structure.store.getFreeCapacity(RESOURCE_ENERGY) > 0;});
 
+    }
+
+}
+*/

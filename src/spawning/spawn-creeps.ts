@@ -4,7 +4,7 @@ export function manageSpawns(harvestersRequired: number) {
 
     /* Define our population targets */
     let harvesterMin = harvestersRequired;
-    let harvesterMax = harvestersRequired + 1;
+    let harvesterMax = harvestersRequired;
     let builderMin = 2;
     let builderMax = 4;
     let upgraderMin = 2;

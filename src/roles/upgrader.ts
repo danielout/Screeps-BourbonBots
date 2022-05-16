@@ -14,12 +14,13 @@ export var roleUpgrader = {
                         structure.store.getUsedCapacity(RESOURCE_ENERGY) > 0;
                 }
             });
-            if(creep.withdraw(sources[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) { // If we aren't in range of our target, move to it. Otherwise, withdraw energy
-                creep.moveTo(sources[0], {visualizePathStyle: {stroke: '#ffaa00'}});
-            } else if (sources.length == 0) {
-                var drops = creep.room.find(FIND_DROPPED_RESOURCES);
-                if(creep.pickup(drops[0]) == ERR_NOT_IN_RANGE) { // If we aren't in range of our target, move to it, otherwise pickup energy.
-                    creep.moveTo(drops[0], {visualizePathStyle: {stroke: '#ffaa00'}});
+            var closestSource = creep.pos.findClosestByPath(sources);
+            if(creep.withdraw(closestSource, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) { // If we aren't in range of our target, move to it. Otherwise, withdraw energy
+                creep.moveTo(closestSource, {visualizePathStyle: {stroke: '#ffaa00'}});
+            } else if (closestSource == null) {
+                var drops = creep.pos.findClosestByPath(creep.room.find(FIND_DROPPED_RESOURCES));
+                if(creep.pickup(drops) == ERR_NOT_IN_RANGE) { // If we aren't in range of our target, move to it, otherwise pickup energy.
+                    creep.moveTo(drops, {visualizePathStyle: {stroke: '#ffaa00'}});
                 }
             }
 
